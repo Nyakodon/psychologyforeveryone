@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<!--
+  ══════════════════════════════════════════════════════════════
+  ТАПЛИНК: Диана Поливанова
+  ══════════════════════════════════════════════════════════════
+  КАК ПОЛЬЗОВАТЬСЯ:
+  - Менять можно тексты и ссылки — ищите комментарии ниже,
+    они подскажут, где что. Остальной код лучше не трогать.
+
+  ШПАРГАЛКА (работает для любой карточки на странице):
+  - href="..."        это АДРЕС, куда ведёт клик — меняйте ссылку тут
+  - <img src="...">   это КАРТИНКА — чтобы заменить, вставьте
+                      другую ссылку на картинку внутрь src="..."
+  - Текст между > и < это НАДПИСИ — их можно править свободно
+  ══════════════════════════════════════════════════════════════
+-->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#F1F5FC">
+  <title>Диана Поливанова</title>
+
+<!-- ▼ СТИЛИ (цвета, шрифты, отступы). БЕЗ НУЖДЫ НЕ ТРОГАТЬ ▼ -->
+  <style>
+    :root {
+      --bg: #F1F5FC; --surface: #FFFFFF; --fg: #0B1A38; --muted: #54607A;
+      --muted-soft: #94A1BC; --accent: #1F4FD1; --accent-deep: #0F2E8C;
+      --accent-soft: #E8EFFE; --radius-card: 18px; --max: 480px;
+      --shadow-card: 0 4px 14px rgba(15,50,140,.08), 0 1px 4px rgba(15,50,140,.04);
+      --shadow-hover: 0 14px 36px rgba(15,50,140,.14), 0 4px 12px rgba(15,50,140,.08);
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      background: var(--bg); color: var(--fg);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      font-size: 15px; line-height: 1.45; -webkit-font-smoothing: antialiased; min-height: 100vh;
+    }
+    a { color: inherit; text-decoration: none; }
+    a, button { touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+    .page { max-width: var(--max); margin: 0 auto; padding: 24px 20px 64px; }
+
+    .header { display: flex; align-items: flex-start; gap: 18px; padding: 8px 0 20px; }
+    .header__avatar {
+      flex-shrink: 0; width: 96px; height: 96px; border-radius: 50%;
+      overflow: hidden; background: var(--accent-soft);
+      box-shadow: 0 8px 24px rgba(15,50,140,.15), 0 0 0 4px #fff;
+    }
+    .header__avatar img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 22%; display: block; }
+    .header__info { flex: 1; min-width: 0; padding-top: 2px; }
+    .header__name { font-size: 17px; font-weight: 600; line-height: 1.25; margin: 0 0 8px; letter-spacing: -0.2px; }
+    .header__lines { display: flex; flex-direction: column; gap: 4px; }
+    .header__line { font-size: 13.5px; line-height: 1.4; color: var(--fg); }
+
+    .bio {
+      background: var(--surface); border-radius: var(--radius-card);
+      padding: 18px 20px; margin-bottom: 16px; box-shadow: var(--shadow-card);
+    }
+    .bio__lead { font-size: 14.5px; font-weight: 600; color: var(--fg); margin: 0 0 12px; line-height: 1.4; }
+    .bio__text { font-size: 14px; color: var(--muted); line-height: 1.55; margin: 0 0 8px; }
+    .bio__text:last-child { margin-bottom: 0; }
+    .bio__list { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 8px; }
+    .bio__item { display: flex; gap: 10px; font-size: 14px; color: var(--muted); line-height: 1.45; }
+    .bio__item::before { content: "•"; color: var(--accent); font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+
+    .section-label {
+      font-size: 12px; font-weight: 700; letter-spacing: .6px;
+      text-transform: uppercase; color: var(--muted-soft);
+      margin: 20px 0 10px 4px;
+    }
+.contacts {
+      display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 16px;
+    }
+    .contact-btn {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 8px; padding: 16px 8px;
+      background: var(--surface); border-radius: var(--radius-card);
+      box-shadow: var(--shadow-card); text-align: center;
+      transition: transform .18s ease, box-shadow .22s ease;
+    }
+    .contact-btn:hover { transform: translateY(-3px); box-shadow: var(--shadow-hover); }
+    .contact-btn:active { transform: translateY(-1px); }
+    .contact-btn__icon {
+      width: 44px; height: 44px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .contact-btn__icon svg { width: 20px; height: 20px; fill: #fff; }
+    .contact-btn__label { font-size: 12.5px; font-weight: 600; color: var(--fg); line-height: 1.25; }
+
+    .cta-wrap {
+      background: var(--surface); border-radius: var(--radius-card);
+      padding: 20px; box-shadow: var(--shadow-card);
+    }
+    .cta-wrap__text { font-size: 14px; color: var(--muted); line-height: 1.5; margin: 0 0 14px; }
+    .qa-cta {
+      display: flex; align-items: center; justify-content: center; width: 100%;
+      padding: 17px 20px; background: linear-gradient(135deg, var(--accent), var(--accent-deep));
+      color: #fff; border-radius: 12px; font-size: 15px; font-weight: 700;
+      letter-spacing: -0.1px; box-shadow: 0 6px 18px rgba(31,79,209,.35);
+      transition: transform .15s ease, box-shadow .2s ease;
+    }
+    .qa-cta:hover  { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(31,79,209,.42); }
+    .qa-cta:active { transform: translateY(0) scale(.99); }
+
+    .channel {
+      display: flex; align-items: center; gap: 14px; padding: 12px 16px;
+      background: var(--surface); border-radius: var(--radius-card);
+      margin-bottom: 12px; box-shadow: var(--shadow-card); position: relative;
+      transition: transform .18s ease, box-shadow .22s ease;
+    }
+    .channel:hover { transform: translateY(-3px); box-shadow: var(--shadow-hover); }
+    .channel__avatar {
+      position: relative; width: 56px; height: 56px; border-radius: 50%;
+      overflow: hidden; flex-shrink: 0; background: var(--accent-soft);
+    }
+    .channel__avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .channel__badge {
+      position: absolute; right: -2px; bottom: -2px; width: 22px; height: 22px;
+      border-radius: 50%; border: 2px solid #fff;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .channel__badge svg { width: 12px; height: 12px; fill: #fff; }
+    .channel__body { flex: 1; min-width: 0; padding-right: 18px; }
+    .channel__name { font-size: 15px; font-weight: 600; line-height: 1.25; margin: 0 0 2px; }
+    .channel__sub  { font-size: 13px; color: var(--muted); line-height: 1.3; }
+    .channel__chevron {
+      position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
+      color: var(--accent); width: 16px; height: 16px;
+    }
+.card {
+      display: flex; align-items: stretch; gap: 14px; padding: 12px;
+      background: var(--surface); border-radius: var(--radius-card);
+      margin-bottom: 12px; box-shadow: var(--shadow-card); position: relative;
+      transition: transform .18s ease, box-shadow .22s ease;
+    }
+    .card:hover { transform: translateY(-3px); box-shadow: var(--shadow-hover); }
+    .card:active { transform: translateY(-1px); }
+    .card__cover {
+      flex-shrink: 0; width: 112px; aspect-ratio: 4 / 3;
+      border-radius: 10px; overflow: hidden; position: relative;
+    }
+    .card__cover-icon {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .card__cover-icon svg { width: 38px; height: 38px; fill: rgba(255,255,255,.85); }
+    .card__body {
+      flex: 1; min-width: 0; display: flex; flex-direction: column;
+      justify-content: center; padding-right: 18px;
+    }
+    .card__title { font-size: 14.5px; font-weight: 600; line-height: 1.32; color: var(--fg); margin: 0 0 6px; letter-spacing: -0.1px; }
+    .card__meta  { font-size: 12px; color: var(--muted); line-height: 1.35; }
+    .card__chevron {
+      position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
+      color: var(--accent); width: 16px; height: 16px;
+    }
+
+    @media (max-width: 360px) {
+      .page { padding: 20px 16px 56px; }
+      .header__avatar { width: 84px; height: 84px; }
+      .card__cover { width: 96px; }
+      .contacts { grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+      .contact-btn { padding: 14px 6px; }
+      .contact-btn__icon { width: 38px; height: 38px; }
+    }
+
+    /* brand icons */
+    .qa-cta img { width: 20px; height: 20px; margin-right: 10px; border-radius: 50%; flex-shrink: 0; }
+    .contact-btn__icon img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; display: block; }
+    .channel__badge img, .channel__icon img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; display: block; }
+    .card__cover-icon img { width: 44px; height: 44px; border-radius: 50%; }
+  </style>
+<!-- ▲ КОНЕЦ СТИЛЕЙ. НИЖЕ — СОДЕРЖИМОЕ СТРАНИЦЫ ▲ -->
+</head>
+<body>
+  <main class="page">
+
+    <!-- ФОТО И ИМЯ. Заменить фото: новая ссылка внутрь src="..." -->
+
+    <header class="header">
+      <div class="header__avatar">
+        <img src="img/diana-avatar.jpg" alt="Диана Поливанова" width="400" height="400" decoding="async" fetchpriority="high">
+      </div>
+      <div class="header__info">
+        <h1 class="header__name">Диана Поливанова</h1>
+        <div class="header__lines">
+          <div class="header__line">Психолог · Психогенеалог</div>
+        </div>
+      </div>
+    </header>
+
+    <!-- БЛОК «О СЕБЕ» — тексты можно править прямо здесь -->
+
+    <div class="bio">
+      <p class="bio__lead">Комплексная работа с человеком через психологию и родовые сценарии.</p>
+      <p class="bio__text">Моя задача — раскрыть ваш внутренний потенциал, помочь понять, почему жизнь складывается определённым образом, а сценарии повторяются из раза в раз, мешая двигаться вперёд.</p>
+      <p class="bio__text">Работа со мной поможет вам обрести опору и устойчивость, лучше узнать себя и почувствовать изменения, которые заметны не только снаружи, но и внутри.</p>
+    </div>
+
+    <p class="section-label">Связаться со мной</p>
+
+    <div class="contacts">
+      <!-- КОНТАКТ: «Telegram» — ссылка в href, название в тексте ниже -->
+      <a href="https://t.me/diana_polivanova" rel="noopener" class="contact-btn">
+        <div class="contact-btn__icon"><img src="img/telegram.webp" alt="" loading="lazy"></div>
+        <div class="contact-btn__label">Telegram</div>
+      </a>
+
+      <!-- КОНТАКТ: «Макс» — ссылка в href, название в тексте ниже -->
+<a href="https://max.ru/u/f9LHodD0cOIVaGrynjBSO8ghl9WHRvkRhPtr9mOdeBZdO0R5nV1FSDM5fh0" rel="noopener" class="contact-btn">
+        <div class="contact-btn__icon"><img src="img/max.jpg" alt="" loading="lazy"></div>
+        <div class="contact-btn__label">Макс</div>
+      </a>
+
+      <!-- КОНТАКТ: «ВКонтакте» — ссылка в href, название в тексте ниже -->
+
+      <a href="https://vk.ru/diana_polivanova_rod" rel="noopener" class="contact-btn">
+        <div class="contact-btn__icon" style="background: #0077FF;">
+          <svg viewBox="0 0 24 24"><path d="M15.07 2H8.93C3.33 2 2 3.33 2 8.93v6.14C2 20.67 3.33 22 8.93 22h6.14C20.67 22 22 20.67 22 15.07V8.93C22 3.33 20.67 2 15.07 2zm2.18 13.46h-1.5c-.57 0-.74-.45-1.76-1.49-.88-.86-1.27-.97-1.48-.97-.3 0-.39.08-.39.51v1.36c0 .36-.11.57-1.11.57-1.64 0-3.46-.99-4.74-2.84C4.81 9.95 4.5 8 4.5 7.6c0-.22.08-.43.51-.43h1.49c.38 0 .52.18.67.59.74 2.07 1.99 3.89 2.51 3.89.19 0 .28-.09.28-.58V8.86c-.06-.99-.58-1.08-.58-1.43 0-.17.14-.34.37-.34H12c.31 0 .43.17.43.55v2.98c0 .31.14.42.23.42.19 0 .35-.11.7-.46 1.12-1.26 1.92-3.19 1.92-3.19.11-.22.29-.43.67-.43h1.49c.45 0 .55.23.45.55-.19.87-2.04 3.47-2.04 3.47-.16.26-.22.37 0 .66.16.22.67.68 1.01 1.09.63.71 1.1 1.31 1.1 1.75 0 .46-.23.69-.7.69z"/></svg>
+        </div>
+        <div class="contact-btn__label">ВКонтакте</div>
+      </a>
+    </div>
+
+    <!-- ГЛАВНАЯ КНОПКА: текст кнопки и ссылка в href -->
+
+    <div class="cta-wrap">
+      <p class="cta-wrap__text">Запишитесь на консультацию — и вы увидите корень того, что происходит, и получите конкретные шаги, чтобы начать менять это осознанно</p>
+      <a href="https://t.me/diana_polivanova" rel="noopener" class="qa-cta">Записаться на консультацию</a>
+    </div>
+
+    <p class="section-label">Мои публикации</p>
+
+    <!-- КАРТОЧКА: «Ловушка идеальности» — ссылка в href, название в тексте ниже -->
+
+    <a href="https://tolkochto.ru/news/159617.html" rel="noopener" class="card">
+      <div class="card__cover" style="background: linear-gradient(135deg, #7b2ff7 0%, #f107a3 100%);">
+        <div class="card__cover-icon">
+          <svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"/></svg>
+        </div>
+      </div>
+      <div class="card__body">
+        <h3 class="card__title">Ловушка идеальности</h3>
+        <div class="card__meta">Как перфекционизм «ворует» у нас жизнь</div>
+      </div>
+      <svg class="card__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg>
+    </a>
+
+    <!-- КАРТОЧКА: «Почему мы боимся перемен» — ссылка в href, название в тексте ниже -->
+
+    <a href="https://civitas.ru/pochemu-my-boimsya-peremen-prichiny-vnutrennego-soprotivleniya/" rel="noopener" class="card">
+      <div class="card__cover" style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);">
+        <div class="card__cover-icon">
+          <svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"/></svg>
+        </div>
+      </div>
+      <div class="card__body">
+        <h3 class="card__title">Почему мы боимся перемен</h3>
+        <div class="card__meta">Причины внутреннего сопротивления</div>
+      </div>
+      <svg class="card__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg>
+    </a>
+
+    <!-- КАРТОЧКА: «Симфония повседневности» — ссылка в href, название в тексте ниже -->
+<a href="https://infonex.ru/simfoniya-povsednevnosti-kak-sovmestit-garmoniyu-s-beshenym-ritmom-sovremennosti/" rel="noopener" class="card">
+      <div class="card__cover" style="background: linear-gradient(135deg, #f7971e 0%, #ffd200 100%);">
+        <div class="card__cover-icon">
+          <svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"/></svg>
+        </div>
+      </div>
+      <div class="card__body">
+        <h3 class="card__title">Симфония повседневности</h3>
+        <div class="card__meta">Гармония в бешеном ритме современности</div>
+      </div>
+      <svg class="card__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg>
+    </a>
+
+    <!-- КАРТОЧКА: «Код характера» — ссылка в href, название в тексте ниже -->
+
+    <a href="https://guberniya.info/society/kod-haraktera-kak-blizkie-mogut-vliyat-na-formirovanie-nashej-lichnosti.html" rel="noopener" class="card">
+      <div class="card__cover" style="background: linear-gradient(135deg, #e53935 0%, #fb8c00 100%);">
+        <div class="card__cover-icon">
+          <svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"/></svg>
+        </div>
+      </div>
+      <div class="card__body">
+        <h3 class="card__title">Код характера</h3>
+        <div class="card__meta">Как близкие влияют на формирование личности</div>
+      </div>
+      <svg class="card__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg>
+    </a>
+
+    <p class="section-label">Мои каналы</p>
+
+    <!-- КАНАЛ: «Диана Поливанова» — ссылка в href, название в тексте ниже -->
+
+    <a href="https://t.me/diana_polivanova_rod" rel="noopener" class="channel">
+      <div class="channel__avatar">
+        <img src="img/channel-tg.jpg" alt="" width="112" height="112" decoding="async" loading="lazy">
+      </div>
+      <div class="channel__body">
+        <div class="channel__name">Диана Поливанова</div>
+        <div class="channel__sub">Telegram-канал @diana_polivanova_rod</div>
+      </div>
+      <svg class="channel__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg>
+    </a>
+
+    <!-- КАНАЛ: «Диана Поливанова» — ссылка в href, название в тексте ниже -->
+
+    <a href="https://max.ru/join/gNqtZ2AHyrk3pzApjDrtQ8zp6q3zb0U-B-RWc9aEr3A" rel="noopener" class="channel">
+      <div class="channel__avatar">
+        <img src="img/channel-max.webp" alt="" width="112" height="112" decoding="async" loading="lazy">
+      </div>
+      <div class="channel__body">
+        <div class="channel__name">Диана Поливанова</div>
+        <div class="channel__sub">Канал в Макс</div>
+      </div>
+      <svg class="channel__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg>
+    </a>
+
+    <!-- КАНАЛ: «Канал с отзывами» — ссылка в href, название в тексте ниже -->
+
+    <a href="https://t.me/+YmsfqeIgDM42YmUy" rel="noopener" class="channel">
+      <div class="channel__avatar">
+        <img src="img/channel-reviews.png" alt="" width="112" height="112" decoding="async" loading="lazy">
+        <div class="channel__badge" style="background: #f7971e;">
+          <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+        </div>
+      </div>
+      <div class="channel__body">
+        <div class="channel__name">Канал с отзывами</div>
+        <div class="channel__sub">Отзывы клиентов · Telegram</div>
+      </div>
+      <svg class="channel__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg>
+    </a>
+
+  </main>
+</body>
+</html>
